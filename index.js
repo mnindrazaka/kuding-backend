@@ -2,6 +2,13 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 
+const problems = [
+  { input: 5, expected_output: 25 },
+  { input: 10, expected_output: 100 },
+  { input: 2, expected_output: 4 },
+  { input: 6, expected_output: 36 }
+]
+
 app.use(express.json())
 app.use(cors())
 
@@ -10,8 +17,17 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-  const result = eval(req.body.script)
-  res.json(result)
+  let { script } = req.body
+
+  res.json(
+    problems.map(problem => {
+      const output = eval(script + ` power(${problem.input})`)
+      return {
+        ...problem,
+        output
+      }
+    })
+  )
 })
 
 app.listen(process.env.PORT || 3000, () => console.log('server running'))
