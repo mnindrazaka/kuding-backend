@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const router = require('./config/router')
+require('./config/db')
 
 const problems = [
   { input: 5, expected_output: 25 },
@@ -29,5 +31,7 @@ app.post('/', (req, res) => {
     })
   )
 })
+
+app.use(router)
 
 app.listen(process.env.PORT || 3000, () => console.log('server running'))
