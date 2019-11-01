@@ -33,5 +33,23 @@ module.exports = {
     TaskModel.findOneAndDelete({ _id: req.params.id }).then(function(row) {
       res.send(row)
     })
+  },
+
+  submit: function(req, res) {
+    let { script } = req.body
+
+    TaskModel.findById(req.params.id).then(function(row) {
+      console.log(row)
+      res.json(
+        row.test_cases.map(test_case => {
+          const output = eval(script + ` kuding(${test_case.input})`)
+          return {
+            input: test_case.input,
+            expected_output: test_case.expected_output,
+            output: JSON.stringify(output)
+          }
+        })
+      )
+    })
   }
 }
