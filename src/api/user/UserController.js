@@ -40,7 +40,10 @@ module.exports = {
     const { username, password } = req.body
     UserModel.findOne({ username, password }).then(function(row) {
       if (row) {
-        jwt.sign({ username }, 'secret', function(err, token) {
+        jwt.sign({ _id: row._id, username: row.username }, 'secret', function(
+          err,
+          token
+        ) {
           res.send({ success: true, token })
         })
       } else res.send({ success: false })

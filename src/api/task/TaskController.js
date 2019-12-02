@@ -2,9 +2,11 @@ const TaskModel = require('./TaskModel')
 
 module.exports = {
   index: function(req, res) {
-    TaskModel.find().then(function(rows) {
-      res.send(rows)
-    })
+    TaskModel.find()
+      .populate('user')
+      .then(function(rows) {
+        res.send(rows)
+      })
   },
 
   show: function(req, res) {
@@ -14,6 +16,8 @@ module.exports = {
   },
 
   store: function(req, res) {
+    console.log(req.user)
+    req.body.user = req.user._id
     TaskModel.create(req.body).then(function(row) {
       res.send(row)
     })
